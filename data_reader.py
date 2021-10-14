@@ -3,7 +3,8 @@ import progressbar as pb
 import csv
 import re, string
 
-
+word1 = ' iloinen '
+word2 = ' surullinen '
 
 start = datetime.now()
 file = 'C:/lipasto/NLP/data/s24_2001.vrt'
@@ -39,7 +40,10 @@ with open(file, encoding='utf8') as src:
 					#do something with the data
 					#print("######################################")
 					thread_start = True
+					sentence = []
+					text_body = ''
 					for i in text:
+
 
 						if i.startswith("<text"):
 							#sentence = []
@@ -55,8 +59,8 @@ with open(file, encoding='utf8') as src:
 								if attribute.startswith('datetime='):
 									#pass
 									#save data
-									datetime = attribute.lstrip("datetime=\"")
-									sentence.append(datetime)
+									post_datetime = attribute.lstrip("datetime=\"")
+									sentence.append(post_datetime)
 									#print(attribute)
 								elif attribute.startswith('thread_id='):
 									#pass
@@ -87,7 +91,7 @@ with open(file, encoding='utf8') as src:
 							words = i.split()
 							word = words[2].translate(str.maketrans('', '', string.punctuation))
 							text_body += str(word) + ' '
-					if thread_start:
+					if thread_start and (word1 in text_body.lower() or word2 in text_body.lower()):
 						sentence.append(text_body)
 						csv_writer.writerow(sentence)
 						sentence = []
@@ -95,7 +99,7 @@ with open(file, encoding='utf8') as src:
 				
 
 				#print(i)
-#print(datetime.now()-start)
+print(datetime.now()-start)
 """
 for text in texts:
 	print(type(text))
