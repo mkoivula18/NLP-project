@@ -1,14 +1,15 @@
 from datetime import datetime
-
 import progressbar as pb
-
 import csv
+import re, string
 
 
 
 start = datetime.now()
-file = 'C:/lipasto/NLP/data/s24_2001_short.vrt'
+file = 'C:/lipasto/NLP/data/s24_2001.vrt'
+print("Counting number of lines...")
 num_lines = sum(1 for line in open(file, encoding='utf8'))
+
 print(f"Num of lines: {num_lines}")
 
 
@@ -21,6 +22,9 @@ with open(file, encoding='utf8') as src:
 		j = 0
 		text = []
 		for line in src:
+			j += 1
+			if (j % 1000000 == 0):
+				print(f"{int(j / num_lines * 100)}%")
 			#print(f"{i} ---- {line}")
 			if line.startswith('<text'):
 				#empty the list
@@ -81,7 +85,8 @@ with open(file, encoding='utf8') as src:
 						elif in_sentence == True:
 							#a single word inside a sentence
 							words = i.split()
-							text_body += words[2] + ' '
+							word = words[2].translate(str.maketrans('', '', string.punctuation))
+							text_body += str(word) + ' '
 					if thread_start:
 						sentence.append(text_body)
 						csv_writer.writerow(sentence)
