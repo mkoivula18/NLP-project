@@ -1,8 +1,20 @@
 import csv
 from collections import Counter
 
+from nltk.corpus import stopwords
+import nltk
 
+#nltk.download(stopwords)
 file = 'NLP-database.csv'
+
+#print(stopwords.words('finnish'))
+cachedStopWords = stopwords.words('finnish')
+
+def remove_stopwords(text):
+
+	text = ' '.join([word for word in text.split() if word not in cachedStopWords])
+	return text
+
 def main():
 	word1 = 'iloinen'
 	word2 = 'surullinen'
@@ -19,6 +31,7 @@ def search_frequent_words(used_word):
 			
 			if row != []:
 				text = row[2]
+				text = remove_stopwords(text)
 				#print(text)
 				#print(type(text))
 				text_to_list = text.split()
